@@ -1,4 +1,8 @@
-﻿class Programm
+﻿using System.IO;
+using System;
+using System.Security.Cryptography.X509Certificates;
+
+class Programm
 {
     static void Main()
     {
@@ -50,7 +54,7 @@
                         MyArray Mas = new();
                         Mas.PrintMas();
                         Console.Write("Enter filter numbers: ");
-                        str = Console.ReadLine();
+                        str = Console.ReadLine();                        
                         Mas.FilterMas(str);
                         Mas.PrintMas();
                         Console.WriteLine("\nPress any key to continue.");
@@ -60,7 +64,19 @@
                 case '4':
                     {
                         Console.Clear();
-                      
+                        WebSite Site = new WebSite();
+                        Console.Write("Name: ");
+                        Site.setName(Console.ReadLine());
+                        Console.Write("Url: ");
+                        Site.setUrl(Console.ReadLine());
+                        Console.Write("Path: ");
+                        Site.setPath(Console.ReadLine());
+                        Console.Write("IP: ");
+                        Site.setIP(Console.ReadLine());
+                        Console.Write("Discription.");
+                        Site.setDiscription();
+                        Console.WriteLine();
+                        Site.Print_All();
                         Console.WriteLine("\nPress any key to continue.");
                         Console.ReadKey();
                         break;
@@ -68,7 +84,19 @@
                 case '5':
                     {
                         Console.Clear();
-                                         
+                        Journal J = new();
+                        Console.Write("Name: ");
+                        J.setName(Console.ReadLine());
+                        Console.Write("Email: ");
+                        J.setEmail(Console.ReadLine());
+                        Console.Write("Phone: ");
+                        J.setPhone(Console.ReadLine());
+                        Console.Write("Year.");
+                        J.setYear();
+                        Console.Write("Discription.");
+                        J.setDiscription();
+                        Console.WriteLine();
+                        J.Print_All();
                         Console.WriteLine("\nPress any key to continue.");
                         Console.ReadKey();
                         break;
@@ -76,7 +104,18 @@
                 case '6':
                     {
                         Console.Clear();
-                        
+                        Console.WriteLine("3 последних задания - извращения какие-то =\\\n");
+                        Magazine J = new();
+                        Console.Write("Name: ");
+                        J.setName(Console.ReadLine());
+                        Console.Write("Email: ");
+                        J.setEmail(Console.ReadLine());
+                        Console.Write("Phone: ");
+                        J.setPhone(Console.ReadLine());
+                        Console.Write("Discription.");
+                        J.setDiscription();
+                        Console.WriteLine();
+                        J.Print_All();
                         Console.WriteLine("\nPress any key to continue.");
                         Console.ReadKey();
                         break;
@@ -182,8 +221,9 @@ class MyArray
             Console.Write(mas[i]+"  ");
         Console.WriteLine();
     }
-    public void FilterMas(string filterStr)
+    public void FilterMas(string? filterStr)
     {
+        try {
         int k = 0;
         int[] filterMas = null;
         {
@@ -230,9 +270,214 @@ class MyArray
             if (f)
                 tmpMas[k++] = mas[i];
         }
-
-        mas = new int[k];
+            mas = new int[k];        
         for (int i = 0; i < mas.Length; i++)
             mas[i] = tmpMas[i];
+        }
+        catch (Exception ex) { Console.WriteLine(ex.Message); }
+    }
+}
+class WebSite
+{
+    private string? name, url, discription, ip, path;
+    public WebSite() { }
+    public WebSite(string? name, string? url, string? discription, string? ip, string? path)
+    {
+        this.name = name;
+        this.url = url;
+        this.discription = discription;
+        this.ip = ip;
+        this.path = path;
+    }
+
+    public void setName(string n) { name = n; }
+    public void setUrl(string u) { url = u; }
+    public void setDiscription() { discription = Vvod(); }
+    public void setIP(string p) { ip = p; }
+    public void setPath(string p) { path = p; }
+    public string getName() { return name; }
+    public string getUrl() { return url; }
+    public string getDiscription() { return discription; }
+    public string getIP() { return ip; }
+    public string getPath() { return path; }
+    public void Print_All()
+    {
+        Console.WriteLine("Name: " + name + "\nUrl: " + url + "\nIP: " + ip);
+        Console.WriteLine("Path: " + path + "\nDiscription: " + discription);
+    }
+    public string Vvod()
+    {
+        string? str;
+        Console.WriteLine("Enter text here: ");
+        str = Console.ReadLine();
+
+        char[] str2 = str.ToCharArray();
+        bool first = true;
+        for (int i = 0; i < str2.Length; i++)
+        {
+            if (first && Char.IsLetter(str[i]))
+            {
+                str2[i] = Char.ToUpper(str2[i]);
+                first = false;
+            }
+            if (i > 0)
+            {
+                if (str[i - 1] == '.' || str[i - 1] == '!' || str[i - 1] == '?')
+                {
+                    while (!Char.IsLetter(str[i]))
+                    {
+                        if (i + 1 < str2.Length)
+                            i++;
+                        else
+                            break;
+                    }
+                    str2[i] = Char.ToUpper(str2[i]);
+                }
+            }
+        }
+        return new string(str2);
+    }
+}
+class Journal
+{
+    private string? name;
+    private string? email;
+    private string? phone, discription;
+    private int year;
+
+    public Journal(string? name = "Alo", string? email = "alo@gmail.com", string? phone = "+380923891823", int year = 1923)
+    {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.year = year;
+    }
+    public void setName(string? nam) { this.name = nam; }
+    public void setEmail(string? email) { this.email = email; }
+    public void setPhone(string? phone) { this.phone = phone; }
+    public void setDiscription() { discription = Vvod(); }
+    public void setYear() { VvodYear(); }
+    public string getName() { return name; }
+    public string getEmail() { return email; }
+    public string getPhone() { return phone; }
+    public string getDiscription() { return discription; }
+    public int getYear() { return year; }
+    public void Print_All()
+    {
+        Console.WriteLine("Name: " + name + "\nEmail: " + email + "\nPhone: " + phone);
+        Console.WriteLine("Year: " + year + "\nDiscription: " + discription);
+    }
+    public bool Prover(string? str)
+    {
+        for (int i = 0; i < str.Length; i++)
+        {
+            if (!Char.IsDigit(str[i]))
+                return false;
+        }
+        return true;
+    }
+    public string Vvod()
+    {
+        string? str;
+        Console.WriteLine("Enter text here: ");
+        str = Console.ReadLine();
+
+        char[] str2 = str.ToCharArray();
+        bool first = true;
+        for (int i = 0; i < str2.Length; i++)
+        {
+            if (first && Char.IsLetter(str[i]))
+            {
+                str2[i] = Char.ToUpper(str2[i]);
+                first = false;
+            }
+            if (i > 0)
+            {
+                if (str[i - 1] == '.' || str[i - 1] == '!' || str[i - 1] == '?')
+                {
+                    while (!Char.IsLetter(str[i]))
+                    {
+                        if (i + 1 < str2.Length)
+                            i++;
+                        else
+                            break;
+                    }
+                    str2[i] = Char.ToUpper(str2[i]);
+                }
+            }
+        }
+        return new string(str2);
+    }
+    public void VvodYear()
+    {
+        string? str = "as";
+        Console.WriteLine("Введите год основания " + "'" + name + "'");
+        while (str.Length<1 || !Prover(str) || int.Parse(str) > 2022 || int.Parse(str) < 1500)
+        {
+            str = Console.ReadLine();
+            if (str.Length < 1 || !Prover(str) || int.Parse(str) > 2022 || int.Parse(str) < 1500)
+                Console.WriteLine("Ошибка. Введите цифры от 1500 до 2022.");
+        }
+        year = int.Parse(str);
+    }
+}
+class Magazine
+{
+    private string? name;
+    private string? email;
+    private string? phone, discription;
+
+    public Magazine(string? name = "Alo", string? email = "alo@gmail.com", string? phone = "+380923891823")
+    {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+    public void setName(string? nam) { this.name = nam; }
+    public void setEmail(string? email) { this.email = email; }
+    public void setPhone(string? phone) { this.phone = phone; }
+    public void setDiscription() { discription = Vvod(); }
+
+    public string getName() { return name; }
+    public string getEmail() { return email; }
+    public string getPhone() { return phone; }
+    public string getDiscription() { return discription; }
+
+    public void Print_All()
+    {
+        Console.WriteLine("Name: " + name + "\nEmail: " + email + "\nPhone: " + phone);
+        Console.WriteLine("Discription: " + discription);
+    }
+    public string Vvod()
+    {
+        string? str;
+        Console.WriteLine("Enter text here: ");
+        str = Console.ReadLine();
+
+        char[] str2 = str.ToCharArray();
+        bool first = true;
+        for (int i = 0; i < str2.Length; i++)
+        {
+            if (first && Char.IsLetter(str[i]))
+            {
+                str2[i] = Char.ToUpper(str2[i]);
+                first = false;
+            }
+            if (i > 0)
+            {
+                if (str[i - 1] == '.' || str[i - 1] == '!' || str[i - 1] == '?')
+                {
+                    while (!Char.IsLetter(str[i]))
+                    {
+                        if (i + 1 < str2.Length)
+                            i++;
+                        else
+                            break;
+                    }
+                    str2[i] = Char.ToUpper(str2[i]);
+                }
+            }
+        }
+        return new string(str2);
     }
 }
